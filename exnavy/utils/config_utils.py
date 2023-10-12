@@ -23,7 +23,7 @@ def determine_file_format():
     else:
         return "txt"
     
-def read_file(filename):
+def read_config(filename):
     """
     Membaca isi file.
 
@@ -100,7 +100,7 @@ def get_config(filename):
     Returns:
         dict or str: Konfigurasi dibaca dari file. Untuk file TXT, string dikembalikan.
     """
-    config = read_file(filename)
+    config = read_config(filename)
     return config
 
 def change_line(filename, old_string, new_string):
