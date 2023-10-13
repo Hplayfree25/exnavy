@@ -147,7 +147,7 @@ def get_torch_version():
         cprint("Gagal mengambil versi PyTorch: PyTorch tidak diinstal", color="flat_red")
         return None
 
-def informasi_gpu(ambil_nama_gpu=False):
+def get_gpu_info(ambil_nama_gpu=False):
     """
     Mengambil informasi GPU.
 
