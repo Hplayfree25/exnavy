@@ -157,8 +157,8 @@ def get_gpu_info(get_gpu_name=False):
     Returns:
         str: GPU Info.
     """
-    command = ["nvidia-smi", "--query-gpu=gpu_name", "--format=csv,noheader,nounits"]
-    result  = subprocess.run(command.split(" "), stdout=subprocess.PIPE)
+    command = ["nvidia-smi", "--query-gpu=gpu_name", "--format=csv"]
+    result = subprocess.run(command, capture_output=True, text=True)
 
     if result != 0:
         gpu_info = result.stdout.strip().decode("utf-8")
