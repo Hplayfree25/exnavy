@@ -147,31 +147,34 @@ def get_torch_version():
         cprint("Gagal mengambil versi PyTorch: PyTorch tidak diinstal", color="flat_red")
         return None
 
-def get_gpu_info(get_gpu_name=False):
+def informasi_gpu(ambil_nama_gpu=False):
     """
-    Menerima GPU Info
+    Mengambil informasi GPU.
 
-    Args:
-        get_gpu_name (bool, optional): Apakah akan mengambil nama GPU. Standarnya adalah Salah.
+    Args (Argumen):
+        ambil_nama_gpu (bool, opsional): Apakah mengambil nama GPU. Default adalah False.
 
-    Returns:
-        str: GPU Info.
+    Returns (Mengembalikan):
+        str: Informasi GPU.
     """
     command = ["nvidia-smi", "--query-gpu=gpu_name", "--format=csv"]
     result = subprocess.run(command, capture_output=True, text=True)
 
-    if result != 0:
-        gpu_info = result.stdout.strip().decode("utf-8")
-        if get_gpu_name:
-            return gpu_info
-        else:
-            return f"GPU Ketemu! : {gpu_info}"
+    if result.returncode == 0:
+        info_gpu = result.stdout.strip()
+        if ambil_nama_gpu:
+            if 'name' in info_gpu:
+                return info_gpu[5:]
+        return info_gpu
     else:
-        error_message = result.stderr.strip()
-        if "NVIDIA-SMI tidak ditemukan" in error_message and "No devices were found" in error_message:
-            raise RuntimeError ("GPU tidak ditemukan.")
+        pesan_error = result.stderr.strip()
+        if "NVIDIA-SMI has failed" in error_message and "No devices were found" in pesan_error:
+            if is_google_colab():
+                from google.colab import runtime
+                runtime.unassign()
+            raise RuntimeError("Tidak ada GPU yang ditemukan. GPU tidak ditugaskan di Google Colab.")
         else:
-            raise RuntimeError(f"Eksekusi perintah gagal karena kesalahan: {error_message}")
+            raise RuntimeError(f"Pelaksanaan perintah gagal dengan kesalahan: {error_message}")
         
 def get_gpu_memory():
     """
